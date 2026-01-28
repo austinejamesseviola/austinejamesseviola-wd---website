@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venalista | The Future of Motion</title>
+    <style>
+        /* --- CSS STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 8%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled {
+            padding: 15px 8%;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        nav ul li { margin-left: 40px; }
+
+        nav ul li a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover { color: #fff; }
+
+        .btn-reserve {
+            border: 1px solid #fff;
+            padding: 10px 25px;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .btn-reserve:hover {
+            background: #fff;
+            color: #000 !important;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background: linear-gradient(to right, rgba(0,0,0,0.8) 20%, transparent 80%), 
+                        url('https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=2070&auto=format&fit=crop') center/cover;
+            padding: 0 8%;
+        }
+
+        .hero-content { max-width: 600px; text-align: left; }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #ccc;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+        }
+
+        .cta-button {
+            padding: 18px 45px;
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .cta-button:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* --- NEW: Trailer Section --- */
+        .trailer-section {
+            position: relative;
+            height: 80vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .trailer-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 8%;
+        }
+
+        .trailer-content h2 {
+            font-size: 3rem;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .play-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 15px 30px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .play-toggle:hover { background: #fff; color: #000; }
+
+        /* Model Selector Tabs */
+        .model-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 40px 0;
+            background: #050505;
+        }
+
+        .tab {
+            padding: 10px 25px;
+            border: 1px solid #ff4d4d;
+            color: #fff;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 800;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .tab.active {
+            background: #ff4d4d;
+        }
+
+        /* Hyper Section */
+        .hyper-showcase {
+            display: flex;
+            align-items: center;
+            padding: 80px 8%;
+            gap: 50px;
+            background: #050505;
+            min-height: 600px;
+        }
+
+        .hyper-img {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 77, 77, 0.1);
+            transition: opacity 0.5s ease;
+        }
+
+        .hyper-img img { width: 100%; display: block; border-radius: 8px; }
+
+        .hyper-info { flex: 1; transition: transform 0.5s ease, opacity 0.5s ease; }
+
+        .hyper-info h2 { font-size: 3rem; margin-bottom: 20px; }
+
+        .hyper-info p { color: #888; margin-bottom: 30px; font-size: 1.1rem; }
+
+        .stats-grid {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: #111;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            border-radius: 4px;
+        }
+
+        .stat-label { font-size: 0.7rem; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+        .stat-value { font-size: 1.2rem; font-weight: 800; color: #ff4d4d; }
+
+        /* Engineering Section */
+        .features {
+            padding: 120px 8%;
+            background: #050505;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 80px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: #0e0e0e;
+            padding: 60px 40px;
+            border: 1px solid #1a1a1a;
+            text-align: left;
+            transition: 0.4s ease;
+        }
+
+        .card:hover { border-color: #333; transform: translateY(-5px); }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .card p { color: #888; font-size: 0.9rem; line-height: 1.8; }
+
+        /* Innovation Section */
+        .innovation {
+            padding: 100px 8%;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: center;
+            background: #0a0a0a;
+        }
+
+        .innovation-image {
+            width: 100%;
+            height: 450px;
+            background: url('Pioneering Tomorrow.jpg') center/cover;
+            border-radius: 4px;
+            box-shadow: 0 0 50px rgba(0, 150, 255, 0.1);
+        }
+
+        .innovation-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .innovation-text p {
+            color: #aaa;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Experience Section --- */
+        .experience-section {
+            padding: 100px 8%;
+            background: #050505;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+            width: 100%;
+        }
+
+        .exp-item {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .exp-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: 0.6s;
+        }
+
+        .exp-item:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .exp-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            text-align: left;
+        }
+
+        /* --- Global Showroom Section --- */
+        .showroom-section {
+            padding: 100px 8%;
+            background: #050505;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .showroom-image {
+            height: 500px;
+            background: url('https://images.unsplash.com/photo-1562141989-c5c79ac8f576?q=80&w=2070&auto=format&fit=crop') center/cover;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .showroom-content h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        .showroom-content ul { list-style: none; margin-top: 30px; }
+        .showroom-content ul li { 
+            padding: 15px 0; 
+            border-bottom: 1px solid #222; 
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+        }
+        .showroom-content ul li span { color: #fff; font-weight: 800; }
+
+        /* --- Heritage Section --- */
+        .heritage-section {
+            padding: 100px 8%;
+            background: #000;
+            text-align: center;
+        }
+        .heritage-section h2 { font-size: 1rem; color: #ff4d4d; letter-spacing: 5px; margin-bottom: 20px;}
+        .heritage-section blockquote {
+            font-size: 2rem;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+            color: #eee;
+        }
+
+        /* --- Contact Section --- */
+        .contact-section {
+            padding: 120px 8%;
+            background: #0a0a0a;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 80px;
+        }
+
+        .contact-info h2 { font-size: 3rem; margin-bottom: 20px; font-weight: 800; }
+        .contact-info p { color: #888; margin-bottom: 40px; }
+
+        .location-box {
+            margin-top: 40px;
+            padding: 30px;
+            background: #111;
+            border-left: 4px solid #ff4d4d;
+        }
+        .location-box h4 { text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-size: 0.9rem;}
+        .location-box p { margin-bottom: 10px; font-size: 0.9rem; color: #ccc;}
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #555;
+        }
+
+        .input-group input, .input-group textarea {
+            background: #111;
+            border: 1px solid #222;
+            padding: 15px;
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: #ff4d4d;
+        }
+
+        .submit-btn {
+            background: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover { background: #cc0000; }
+
+        /* Footer */
+        footer {
+            padding: 60px 8%;
+            border-top: 1px solid #1a1a1a;
+            text-align: center;
+            color: #555;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 900px) {
+            .innovation, .hyper-showcase, .contact-section, .experience-grid, .showroom-section { grid-template-columns: 1fr; }
+            nav ul { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <a href="#" class="logo">VENALISTA</a>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#models">Models</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#" class="btn-reserve">Reserve</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="reveal">VENALISTA V1</h1>
+            <p class="reveal">The intersection of silence and raw power.</p>
+            <button class="cta-button reveal" onclick="scrollToSection('models')">Configure Yours</button>
+        </div>
+    </section>
+
+    <section class="trailer-section reveal">
+        <div class="video-container">
+            <video id="trailerVideo" autoplay muted loop playsinline>
+                <source src="Corvette CINEMATIC Car Commercial I Blender.mp4" type="video/mp4">
+            </video>
+           </div>
+    </section>
+
+    <div class="model-selector">
+        <div class="tab active" data-model="v1">V-1</div>
+        <div class="tab" data-model="solis">Solis</div>
+        <div class="tab" data-model="nero">Nero</div>
+        <div class="tab" data-model="volt">Volt</div>
+        <div class="tab" data-model="strada">Strada</div>
+    </div>
+
+    <section id="models" class="hyper-showcase reveal">
+        <div class="hyper-img">
+            <img id="model-image" src="Venalista V-1 Hyper.jpg" alt="Model Visual">
+        </div>
+        <div class="hyper-info">
+            <h2 id="model-title">Venalista V-1 Hyper</h2>
+            <p id="model-desc">The flagship predator. Engineered for the track, refined for the soul. Featuring a carbon-fiber monocoque and active aerodynamics.</p>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">0-100 km/h</div>
+                    <div id="stat-accel" class="stat-value">2.1s</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Top Speed</div>
+                    <div id="stat-speed" class="stat-value">355 km/h</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Power</div>
+                    <div id="stat-power" class="stat-value">1200 hp</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="reveal">Engineering Excellence</h2>
+        <div class="grid">
+            <div class="card reveal">
+                <h3>01. Velocity</h3>
+                <p>Equipped with a bespoke tri-motor configuration, the V1 achieves 0-60 in 1.9s with a top speed exceeding 210mph.</p>
+            </div>
+            <div class="card reveal">
+                <h3>02. Range</h3>
+                <p>Proprietary solid-state battery architecture offering a consistent 520-mile range on a single 15-minute charge.</p>
+            </div>
+            <div class="card reveal">
+                <h3>03. Autonomy</h3>
+                <p>The Venalista Neural Link utilizes 12 ultrasonic sensors and LiDAR to provide Level 4 autonomous capability.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="experience-section">
+        <h2 class="reveal">Crafted Experiences</h2>
+        <div class="experience-grid">
+            <div class="exp-item reveal">
+                <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2070&auto=format&fit=crop" alt="Bespoke Design">
+                <div class="exp-overlay">
+                    <h3>Bespoke Atelier</h3>
+                    <p>Customize every stitch to reflect your personal legacy.</p>
+                </div>
+            </div>
+            <div class="exp-item reveal">
+                <img src="Track Dominance.jpg" alt="Track Performance">
+                <div class="exp-overlay">
+                    <h3>Track Dominance</h3>
+                    <p>Access exclusive racing circuits worldwide with our pro team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="showroom-section">
+        <div class="showroom-image reveal">
+            <img src="The Global Showroom.jpg" alt="Venalista Global Showroom" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
+        </div>
+        <div class="showroom-content reveal">
+            <h2>The Global Showroom</h2>
+            <p>Our flagship showrooms are designed to be sanctuaries for the automotive enthusiast. Experience the tactile luxury of our materials and the roar of our engines in person.</p>
+            <ul>
+                <li>Global Headquarters <span>Manila, PH</span></li>
+                <li>Design Studio <span>Modena, IT</span></li>
+                <li>Technical Hub <span>Stuttgart, DE</span></li>
+                <li>Logistics Center <span>Dubai, UAE</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="tech" class="innovation">
+        <div class="innovation-image reveal"></div>
+        <div class="innovation-text reveal">
+            <h2>Pioneering Tomorrow</h2>
+            <p>At Venalista, innovation is not just a feature. We integrate advanced robotics and intuitive AI to ensure your vehicle adapts to your lifestyle in real-time.</p>
+            <button class="cta-button" style="padding: 12px 30px; font-size: 0.7rem;">Learn More</button>
+        </div>
+    </section>
+
+    <section class="heritage-section reveal">
+        <h2>EST. 2026</h2>
+        <blockquote>"We don't build cars. We build time machines that transport you to the next era of human movement."</blockquote>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="contact-info reveal">
+            <h2>Connect With Us</h2>
+            <p>Join the elite circle of Venalista owners. Our concierge team is available 24/7 for technical support and private viewing arrangements.</p>
+            
+            <div class="location-box">
+                <h4>Primary Headquarters</h4>
+                <p>12th Avenue, Bonifacio Global City,<br>Taguig, Metro Manila, Philippines</p>
+                
+                <h4 style="margin-top: 20px;">Showroom Hours</h4>
+                <p>Monday - Friday: 09:00 AM - 08:00 PM<br>Saturday - Sunday: 10:00 AM - 06:00 PM</p>
+            </div>
+
+            <div style="margin-top: 30px; color: #ff4d4d; letter-spacing: 2px; font-weight: 800;">
+                +63 (2) 888-VENA | CONCIERGE@VENALISTA.COM
+            </div>
+        </div>
+        <form class="contact-form reveal" id="contactForm">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="e.g. Austine James Seviola" required>
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="email@example.com" required>
+            </div>
+            <div class="input-group">
+                <label>Inquiry Type</label>
+                <input type="text" placeholder="e.g. Private Viewing / Technical Consultation">
+            </div>
+            <div class="input-group">
+                <label>Your Message</label>
+                <textarea rows="5" placeholder="Tell us about your requirements..." required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Inquiry</button>
+        </form>
+    </section>
+
+    <footer>
+        © 2026 VENALISTA MOTORS. ALL RIGHTS RESERVED. <br>
+        <span style="opacity: 0.5; font-size: 0.6rem; margin-top: 10px; display: block;">PRIVACY POLICY | TERMS OF SERVICE | COOKIE SETTINGS</span>
+    <p>CEO MR.SEVIOLA, AUSTINE JAMES</p>
+    </footer>
+
+    <script>
+        const modelData = {
+            v1: {
+                title: "Venalista V-1 Hyper",
+                desc: "The flagship predator. Engineered for the track, refined for the soul. Featuring a carbon-fiber monocoque and active aerodynamics.",
+                accel: "2.1s",
+                speed: "355 km/h",
+                power: "1200 hp",
+                img: "Venalista V-1 Hyper.jpg"
+            },
+            solis: {
+                title: "Venalista Solis",
+                desc: "Open-top grand touring at its finest. The Solis combines the roar of a V12 with the elegance of Italian-inspired design.",
+                accel: "2.8s",
+                speed: "320 km/h",
+                power: "850 hp",
+                img: "Venalista Solis.jpg"
+            },
+            nero: {
+                title: "Venalista Nero",
+                desc: "The dark knight of the line-up. A stealth-focused aesthetic coupled with a twin-turbocharged heart.",
+                accel: "2.5s",
+                speed: "340 km/h",
+                power: "920 hp",
+                img: "Venalista Nero.jpg"
+            },
+            volt: {
+                title: "Venalista Volt",
+                desc: "Our first fully electric hyper-GT. Silence has never been this loud. Instant torque, zero compromise.",
+                accel: "1.9s",
+                speed: "310 km/h",
+                power: "1500 hp",
+                img: "Venalista Volt.jpg"
+            },
+            strada: {
+                title: "Venalista Strada",
+                desc: "The daily-driver for the enthusiast. Perfectly balanced weight distribution and ergonomic luxury.",
+                accel: "3.2s",
+                speed: "300 km/h",
+                power: "620 hp",
+                img: "Venalista Strada.jpg"
+            }
+        };
+
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const modelKey = tab.getAttribute('data-model');
+                const data = modelData[modelKey];
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const container = document.querySelector('.hyper-showcase');
+                container.style.opacity = 0;
+                setTimeout(() => {
+                    document.getElementById('model-title').innerText = data.title;
+                    document.getElementById('model-desc').innerText = data.desc;
+                    document.getElementById('stat-accel').innerText = data.accel;
+                    document.getElementById('stat-speed').innerText = data.speed;
+                    document.getElementById('stat-power').innerText = data.power;
+                    document.getElementById('model-image').src = data.img;
+                    container.style.opacity = 1;
+                }, 300);
+            });
+        });
+
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Your inquiry has been sent to the Venalista Concierge. We will contact you shortly.');
+            this.reset();
+        });
+
+        window.addEventListener("scroll", reveal);
+        window.onload = reveal;
+
+    </script>
+</body>
+</html>
